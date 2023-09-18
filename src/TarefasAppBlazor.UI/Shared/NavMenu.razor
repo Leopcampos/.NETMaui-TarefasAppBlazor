@@ -1,4 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using TarefasAppBlazor.UI.Helpers
+
+@inject AuthenticationHelper AuthenticationHelper
+@inject NavigationManager NavigationManager
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Agenda de Tarefas</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -10,55 +15,80 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
 
-        <!-- Menus para usuários não autenticados -->
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-account-login" aria-hidden="true"></span> Autenticar
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="criar-conta">
-                <span class="oi oi-plus" aria-hidden="true"></span> Criar Conta
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="recuperar-senha">
-                <span class="oi oi-envelope-open" aria-hidden="true"></span> Recuperar Senha
-            </NavLink>
-        </div>
+        @if(isAuthenticated)
+        {
+            <!-- Menus para usuários autenticados -->
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="app/dashboard">
+                    <span class="oi oi-home" aria-hidden="true"></span>Dashboard
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="app/cadastrar-tarefas">
+                    <span class="oi oi-plus" aria-hidden="true"></span>Cadastrar Tarefas
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="app/consultar-tarefas">
+                    <span class="oi oi-list" aria-hidden="true"></span>Consultar Tarefas
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="app/dados-usuario">
+                    <span class="oi oi-people" aria-hidden="true"></span>Dados do usuário
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <button class="btn btn text-white" @onclick="Logout">
+                    <span class="oi oi-person" aria-hidden="true"></span>
+                    Sair do Sistema
+                </button>
+            </div>
+        }
+        else
+        {
+            <!-- Menus para usuários não autenticados -->
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="oi oi-account-login" aria-hidden="true"></span> Autenticar
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="criar-conta">
+                    <span class="oi oi-plus" aria-hidden="true"></span> Criar Conta
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="recuperar-senha">
+                    <span class="oi oi-envelope-open" aria-hidden="true"></span> Recuperar Senha
+                </NavLink>
+            </div>
+        }
 
-        <!-- Menus para usuários autenticados -->
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="app/dashboard">
-                <span class="oi oi-home" aria-hidden="true"></span>
-                Dashboard
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="app/cadastrar-tarefas">
-                <span class="oi oi-plus" aria-hidden="true"></span>Cadastrar Tarefas
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="app/consultar-tarefas">
-                <span class="oi oi-list" aria-hidden="true"></span>Consultar Tarefas
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="app/dados-usuario">
-                <span class="oi oi-people" aria-hidden="true"></span>Dados do usuário
-            </NavLink>
-        </div>
     </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
+    private bool isAuthenticated = false;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    //Evento executado sempre que o componente for carregada
+    protected override async Task OnInitializedAsync()
+    {
+        isAuthenticated = await AuthenticationHelper.IsSigningIn();
+    }
+
+    //evento de logout do usuário
+    private async Task Logout()
+    {
+        await AuthenticationHelper.SignOut();
+        NavigationManager.NavigateTo("/", true);
     }
 }

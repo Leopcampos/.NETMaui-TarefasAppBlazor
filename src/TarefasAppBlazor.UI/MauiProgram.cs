@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Blazored.LocalStorage;
+using Microsoft.Extensions.Logging;
+using TarefasAppBlazor.UI.Helpers;
 
 namespace TarefasAppBlazor.UI
 {
@@ -15,9 +17,11 @@ namespace TarefasAppBlazor.UI
                 });
 
             builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddTransient<AuthenticationHelper>();
 
 #if DEBUG
-		builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 #endif
             return builder.Build();

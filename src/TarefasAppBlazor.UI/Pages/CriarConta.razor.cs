@@ -23,7 +23,7 @@ namespace TarefasAppBlazor.UI.Pages
             {
                 //Fazer a requisição para o serviço de cadastro da API
                 var servicesHelper = new ServicesHelper();
-                var result = await servicesHelper.Post<CriarContaRequestModel, CriarContaResponseModel>("criarconta", model);
+                var result = await servicesHelper.Post<CriarContaRequestModel, CriarContaResponseModel>("criarusuario", model);
                 mensagemSucesso = $"Parabéns {result.Nome}, sua conta de usuário foi cadastrada com sucesso!";
                 model = new CriarContaRequestModel();
             }

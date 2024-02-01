@@ -5,6 +5,6 @@
     /// </summary>
     public class AppSettings
     {
-        public static string BaseUrl => @"http://apitarefas-001-site1.gtempurl.com/api/";
+        public static string BaseUrl => @"http://localhost:5093/api/";
     }
 }

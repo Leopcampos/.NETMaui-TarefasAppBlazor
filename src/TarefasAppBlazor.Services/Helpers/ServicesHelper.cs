@@ -16,10 +16,8 @@ namespace TarefasAppBlazor.Services.Helpers
         public ServicesHelper()
         { }
 
-        public ServicesHelper(string accessToken)
-        {
-            _authenticationHeaderValue = new AuthenticationHeaderValue("Bearer", accessToken);
-        }
+        public ServicesHelper(string accessToken) 
+            => _authenticationHeaderValue = new AuthenticationHeaderValue("Bearer", accessToken);
 
         /// <summary>
         /// Método genérico para requisições do tipo POST
@@ -50,6 +48,52 @@ namespace TarefasAppBlazor.Services.Helpers
         }
 
         /// <summary>
+        /// Método genérico para requisições do tipo PUT
+        /// </summary>
+        public async Task<TResponse> Put<TRequest, TResponse>(string endpoint, TRequest request)
+        {
+            //Serializar os dados da requisição em JSON
+            var content = new StringContent(JsonConvert.SerializeObject(request),
+                Encoding.UTF8, "application/json");
+
+            using (var httpClient = new HttpClient())
+            {
+                if (_authenticationHeaderValue != null)
+                    httpClient.DefaultRequestHeaders.Authorization = _authenticationHeaderValue;
+
+                //Fazendo a requisição para a API
+                var result = await httpClient.PutAsync($"{AppSettings.BaseUrl}{endpoint}", content);
+                var response = GetResponse(result);
+
+                if (result.IsSuccessStatusCode)
+                    return JsonConvert.DeserializeObject<TResponse>(response);
+                else
+                {
+                    var error = JsonConvert.DeserializeObject<ErrorResult>(response);
+                    throw new Exception(error.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Método genérico para requisições do tipo DELETE
+        /// </summary>
+        public async Task<TResponse> Delete<TResponse>(string endpoint, Guid id)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                if (_authenticationHeaderValue != null)
+                    httpClient.DefaultRequestHeaders.Authorization = _authenticationHeaderValue;
+
+                //Fazendo a requisição para a API
+                var result = await httpClient.DeleteAsync($"{AppSettings.BaseUrl}{endpoint}/{id}");
+                var response = GetResponse(result);
+
+                return JsonConvert.DeserializeObject<TResponse>(response);
+            }
+        }
+
+        /// <summary>
         /// Método genérico para requisições do tipo GET
         /// </summary>
         public async Task<TResponse> Get<TResponse>(string endpoint)
@@ -67,6 +111,24 @@ namespace TarefasAppBlazor.Services.Helpers
             }
         }
 
+        /// <summary>
+        /// Método genérico para requisições do tipo GET
+        /// </summary>
+        public async Task<TResponse> Get<TResponse>(string endpoint, Guid id)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                if (_authenticationHeaderValue != null)
+                    httpClient.DefaultRequestHeaders.Authorization = _authenticationHeaderValue;
+
+                //Fazendo a requisição para a API
+                var result = await httpClient.GetAsync($"{AppSettings.BaseUrl}{endpoint}/{id}");
+                var response = GetResponse(result);
+
+                return JsonConvert.DeserializeObject<TResponse>(response);
+            }
+        }
+
         private string GetResponse(HttpResponseMessage result)
         {
             //Lendo a resposta obtida da API
@@ -76,6 +138,7 @@ namespace TarefasAppBlazor.Services.Helpers
                 Task<string> task = r.ReadAsStringAsync();
                 builder.Append(task.Result);
             }
+
             return builder.ToString();
         }
     }

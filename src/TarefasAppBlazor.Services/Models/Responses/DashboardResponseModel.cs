@@ -1,8 +1,7 @@
-﻿namespace TarefasAppBlazor.Services.Models.Responses
+﻿namespace TarefasAppBlazor.Services.Models.Responses;
+
+public class DashboardResponseModel
 {
-    public class DashboardResponseModel
-    {
-        public string? Categoria { get; set; }
-        public int Quantidade { get; set; }
-    }
+    public string? Categoria { get; set; }
+    public int Quantidade { get; set; }
 }

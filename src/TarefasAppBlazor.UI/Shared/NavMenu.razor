@@ -15,39 +15,38 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
 
-        @if(isAuthenticated)
+        @if (isAuthenticated)
         {
-            @* Menus para usuários autenticados *@
+            <!-- Menus para usuário autenticado -->
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="app/dashboard">
-                    <span class="oi oi-home" aria-hidden="true"></span>Dashboard
+                    <span class="oi oi-home" aria-hidden="true"></span> Dashboard
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="app/cadastrar-tarefas">
-                    <span class="oi oi-plus" aria-hidden="true"></span>Cadastrar Tarefas
+                    <span class="oi oi-plus" aria-hidden="true"></span> Cadastrar Tarefas
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="app/consultar-tarefas">
-                    <span class="oi oi-list" aria-hidden="true"></span>Consultar Tarefas
+                    <span class="oi oi-list" aria-hidden="true"></span> Consultar Tarefas
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="app/dados-usuario">
-                    <span class="oi oi-people" aria-hidden="true"></span>Dados do usuário
+                    <span class="oi oi-people" aria-hidden="true"></span> Dados do usuário
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <button class="btn btn text-white" @onclick="Logout">
-                    <span class="oi oi-person" aria-hidden="true"></span>
-                    Sair do Sistema
+                    <span class="oi oi-person" aria-hidden="true"></span> Sair do Sistema
                 </button>
             </div>
         }
         else
         {
-            @* Menus para usuários não autenticados *@
+            <!-- Menus para usuário não autenticado -->
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                     <span class="oi oi-account-login" aria-hidden="true"></span> Autenticar
@@ -79,7 +78,7 @@
         collapseNavMenu = !collapseNavMenu;
     }
 
-    //Evento executado sempre que o componente for carregada
+    //evento executado sempre que o componente é carregado
     protected override async Task OnInitializedAsync()
     {
         isAuthenticated = await AuthenticationHelper.IsSigningIn();

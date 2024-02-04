@@ -1,8 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using TarefasAppBlazor.Services.Helpers;
+using System.Net.Http;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
+using Microsoft.JSInterop;
+using TarefasAppBlazor.UI;
+using TarefasAppBlazor.UI.Shared;
 using TarefasAppBlazor.Services.Models.Requests;
-using TarefasAppBlazor.Services.Models.Responses;
 using TarefasAppBlazor.UI.Helpers;
+using TarefasAppBlazor.Services.Helpers;
+using TarefasAppBlazor.Services.Models.Responses;
 
 namespace TarefasAppBlazor.UI.Pages.App
 {

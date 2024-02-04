@@ -35,8 +35,7 @@ namespace TarefasAppBlazor.UI.Helpers
         //método para retornar os dados do usuário autenticado
         public async Task<AutenticarResponseModel> GetUser()
         {
-            return await _localStorageService.GetItemAsync
-            <AutenticarResponseModel>(_key);
+            return await _localStorageService.GetItemAsync<AutenticarResponseModel>(_key);
         }
 
         //método para realizar o logout do usuário

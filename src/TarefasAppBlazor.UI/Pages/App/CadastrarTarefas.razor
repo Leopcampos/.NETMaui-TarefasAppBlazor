@@ -3,7 +3,7 @@
 
 <div class="card m-2">
     <div class="card-body">
-
+        
         <h2>Cadastro de Tarefas</h2>
         <p>Inclua tarefas em sua agenda.</p>
         <hr />
@@ -16,14 +16,14 @@
 
         <EditForm Model="@model" OnValidSubmit="@OnSubmit">
 
-            <DataAnnotationsValidator />
+            <DataAnnotationsValidator/>
 
             <div class="row mb-2">
                 <div class="col-md-6">
                     <label>Nome da tarefa:</label>
-                    <InputText @bind-Value="model.Nome" class="form-control" />
+                    <InputText @bind-Value="model.Nome" class="form-control"/>
                     <span class="text-danger">
-                        <ValidationMessage For="@(() => model.Nome)" />
+                        <ValidationMessage For="@(() => model.Nome)"/>
                     </span>
                 </div>
                 <div class="col-md-3">
@@ -47,7 +47,7 @@
                     <label>Selecione a categoria:</label>
                     <InputSelect @bind-Value="model.Categoria" class="form-select">
                         <option value="">Escolha uma opção</option>
-                        @foreach (var item in Categorias)
+                        @foreach(var item in Categorias)
                         {
                             <option value="@item">@item</option>
                         }
@@ -58,7 +58,7 @@
                 </div>
                 <div class="col-md-9">
                     <label>Descrição da tarefa:</label>
-                    <InputTextArea @bind-Value="model.Descricao" class="form-control" />
+                    <InputTextArea @bind-Value="model.Descricao" class="form-control"/>
                     <span class="text-danger">
                         <ValidationMessage For="@(() => model.Descricao)" />
                     </span>
@@ -68,7 +68,7 @@
             <div class="row mb-2">
                 <div class="col-md-12">
                     <input type="submit" class="btn btn-success"
-                           value="Realizar Cadastro" />
+                        value="Realizar Cadastro"/>
                 </div>
             </div>
 

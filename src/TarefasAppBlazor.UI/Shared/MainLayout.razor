@@ -2,18 +2,21 @@
 
 <div class="page">
     <div class="sidebar">
+
         @* Componente do menu lateral *@
         <NavMenu />
+
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+    <main>      
+        
+        @* Componente para exibir os dados do usuário *@
+        <ContaUsuario/>
 
         <article class="content px-4">
             @* Local para renderizar o conteúdo dos demais componentes *@
             @Body
         </article>
+
     </main>
 </div>

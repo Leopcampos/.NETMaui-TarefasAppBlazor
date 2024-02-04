@@ -20,21 +20,21 @@
                 <div class="card-body">
                     <h5 class="card-title">@item.Nome</h5>
                     <p class="card-text">
-                        de
-                        <span>@item.DataInicio</span>
-                        até <span>@item.DataFim</span>
+                        de 
+                        <span>@item.DataInicio.Value.ToString("ddd dd/MM/yyyy")</span> 
+                        até <span>@item.DataFim.Value.ToString("ddd dd/MM/yyyy")</span>
                         <br />
                         <span class="badge bg-secondary">@item.Categoria</span>
                         <br />
                         <small>@item.Descricao</small>
                     </p>
                     <NavLink href="@OnEdit(item.Id.Value.ToString())"
-                             class="btn btn-primary">
-                        Editar
+                         class="btn btn-outline-primary btn-sm">
+                        Editar tarefa
                     </NavLink>
-                    <button @onclick="(() => OnDelete(item.Id.Value))"
-                            class="btn btn-danger">
-                        Excluir
+                    <button @onclick="(() => OnDelete(item.Id.Value))" 
+                        class="btn btn-outline-danger btn-sm">
+                        Excluir tarefa
                     </button>
                 </div>
             </div>

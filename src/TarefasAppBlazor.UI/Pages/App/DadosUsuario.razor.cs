@@ -11,44 +11,48 @@ using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
 using TarefasAppBlazor.UI;
 using TarefasAppBlazor.UI.Shared;
-using TarefasAppBlazor.UI.Helpers;
 using TarefasAppBlazor.Services.Models.Responses;
+using TarefasAppBlazor.UI.Helpers;
+using TarefasAppBlazor.Services.Models.Requests;
 using TarefasAppBlazor.Services.Helpers;
 
 namespace TarefasAppBlazor.UI.Pages.App
 {
-    public partial class Dashboard
+    public partial class DadosUsuario
     {
-        [Inject]
-        public IJSRuntime JSRuntime { get; set; }
-
+        //injeção de dependência
         [Inject]
         public AuthenticationHelper AuthenticationHelper { get; set; }
 
         //atributos
-        private List<DashboardResponseModel> dadosGrafico = new List<DashboardResponseModel>();
-        private string mensagemProcessamento;
-        private string mensagemErro;
+        private AutenticarResponseModel usuario = new AutenticarResponseModel();
+        private AlterarSenhaRequestModel model = new AlterarSenhaRequestModel();
 
-        //função para ser executada ao abrir o componente
+        private string? mensagemProcessamento;
+        private string? mensagemSucesso;
+        private string? mensagemErro;
+
+        //método para execução ao abrir um componente
         protected override async Task OnInitializedAsync()
         {
-            mensagemProcessamento = "Processando, por favor aguarde...";
+            //capturar os dados do usuário autenticado
+            usuario = await AuthenticationHelper.GetUser();
+        }
 
-            //capturando os dados do usuário autenticado
-            var usuario = await AuthenticationHelper.GetUser();
+        //método para capturar o Submit do formulário
+        protected async Task OnSubmit()
+        {
+            mensagemProcessamento = "Processando, por favor aguarde...";
+            mensagemSucesso = string.Empty;
+            mensagemErro = string.Empty;
 
             try
             {
-                //acessando a API para obter os dados do gráfico
                 var servicesHelper = new ServicesHelper(usuario.AccessToken);
-                dadosGrafico = await servicesHelper.Get<List<DashboardResponseModel>>("dashboard");
+                await servicesHelper.Post<AlterarSenhaRequestModel, AlterarSenhaResponseModel>("alterarsenha", model);
 
-                //executar a função javascript para gerar o conteudo do gráfico
-                await JSRuntime.InvokeAsync<object>
-                    ("createChart", dadosGrafico, "Quantidade de tarefas por categoria", "grafico");
-
-                mensagemErro = string.Empty;
+                mensagemSucesso = "Senha de acesso atualizada com sucesso.";
+                model = new AlterarSenhaRequestModel();
             }
             catch(Exception e)
             {

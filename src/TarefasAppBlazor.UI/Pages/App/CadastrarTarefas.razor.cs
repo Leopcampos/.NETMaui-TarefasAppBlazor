@@ -1,62 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using TarefasAppBlazor.Services.Helpers;
+using System.Net.Http;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
+using Microsoft.JSInterop;
+using TarefasAppBlazor.UI;
+using TarefasAppBlazor.UI.Shared;
 using TarefasAppBlazor.Services.Models.Requests;
-using TarefasAppBlazor.Services.Models.Responses;
 using TarefasAppBlazor.UI.Helpers;
+using TarefasAppBlazor.Services.Helpers;
+using TarefasAppBlazor.Services.Models.Responses;
 
-namespace TarefasAppBlazor.UI.Pages.App;
-
-public partial class CadastrarTarefas
+namespace TarefasAppBlazor.UI.Pages.App
 {
-    [Inject]
-    AuthenticationHelper AuthenticationHelper { get; set; }
-
-    //Definindo a classe de modelo de dados do componente
-    private TarefasCadastroRequestModel model = new TarefasCadastroRequestModel();
-
-    //lista de opções para o campo de seleção de categoria
-    private List<string> Categorias = new List<string>();
-
-    //mensagens
-    private string? mensagemProcessamento;
-    private string? mensagemSucesso;
-    private string? mensagemErro;
-
-    //função para capturar o  SUBMIT do formulário
-    protected async Task OnSubmit()
+    public partial class CadastrarTarefas
     {
-        mensagemProcessamento = "Processando, por favor aguarde...";
+        [Inject]
+        AuthenticationHelper AuthenticationHelper { get; set; }
 
-        try
+        //Definindo a classe de modelo de dados do componente
+        private TarefasCadastroRequestModel model = new TarefasCadastroRequestModel();
+
+        //lista de opções para o campo de seleção de categoria
+        private List<string> Categorias = new List<string>();
+
+        //mensagens
+        private string? mensagemProcessamento;
+        private string? mensagemSucesso;
+        private string? mensagemErro;
+
+        //função para capturar o  SUBMIT do formulário
+        protected async Task OnSubmit()
         {
-            //capturando os dados do usuário autenticado
-            var user = await AuthenticationHelper.GetUser();
+            mensagemProcessamento = "Processando, por favor aguarde...";
 
-            var servicesHelper = new ServicesHelper(user.AccessToken);
-            await servicesHelper.Post<TarefasCadastroRequestModel, TarefasConsultaResponseModel>("tarefas", model);
+            try
+            {
+                //capturando os dados do usuário autenticado
+                var user = await AuthenticationHelper.GetUser();
 
-            this.mensagemSucesso = "Tarefa cadastrada com sucesso";
-            model = new TarefasCadastroRequestModel();
+                var servicesHelper = new ServicesHelper(user.AccessToken);
+                await servicesHelper.Post<TarefasCadastroRequestModel, TarefasConsultaResponseModel>("tarefas", model);
+
+                this.mensagemSucesso = "Tarefa cadastrada com sucesso";
+                model = new TarefasCadastroRequestModel();
+            }
+            catch(Exception e)
+            {
+                mensagemErro = e.Message;
+            }
+            finally
+            {
+                mensagemProcessamento = string.Empty;
+            }
         }
-        catch (Exception e)
+
+        //função executada ao abrir o componente
+        protected override Task OnInitializedAsync()
         {
-            mensagemErro = e.Message;
-        }
-        finally
-        {
-            mensagemProcessamento = string.Empty;
-        }
-    }
+            Categorias.Add("Trabalho");
+            Categorias.Add("Estudo");
+            Categorias.Add("Família");
+            Categorias.Add("Lazer");
+            Categorias.Add("Outros");
 
-    //função executada ao abrir o componente
-    protected override Task OnInitializedAsync()
-    {
-        Categorias.Add("Trabalho");
-        Categorias.Add("Estudo");
-        Categorias.Add("Família");
-        Categorias.Add("Lazer");
-        Categorias.Add("Outros");
-
-        return Task.CompletedTask;
+            return Task.CompletedTask;
+        }
     }
 }

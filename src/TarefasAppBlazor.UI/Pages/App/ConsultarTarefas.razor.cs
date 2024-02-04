@@ -1,8 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using System.Net.Http;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
-using TarefasAppBlazor.Services.Helpers;
+using TarefasAppBlazor.UI;
+using TarefasAppBlazor.UI.Shared;
 using TarefasAppBlazor.Services.Models.Responses;
 using TarefasAppBlazor.UI.Helpers;
+using TarefasAppBlazor.Services.Helpers;
 
 namespace TarefasAppBlazor.UI.Pages.App
 {
@@ -32,7 +43,7 @@ namespace TarefasAppBlazor.UI.Pages.App
                 var servicesHelper = new ServicesHelper(user.AccessToken);
                 model = await servicesHelper.Get<List<TarefasConsultaResponseModel>>("tarefas");
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 mensagemErro = e.Message;
             }
@@ -60,7 +71,7 @@ namespace TarefasAppBlazor.UI.Pages.App
                     mensagemSucesso = "Tarefa excluída com sucesso.";
                     await OnInitializedAsync();
                 }
-                catch (Exception e)
+                catch(Exception e)
                 {
                     mensagemErro = e.Message;
                 }
